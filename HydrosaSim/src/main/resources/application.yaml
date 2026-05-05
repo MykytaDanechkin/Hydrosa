@@ -41,6 +41,7 @@ spring:
   config:
     import: optional:file:.env[.properties]
 app:
+  hydrosa-url: ${HYDROSA_URL:http://localhost:8080}
   gen-util:
     dot-nw:
       lat: ${DOT_NORTHWEST_LAT:55.2}

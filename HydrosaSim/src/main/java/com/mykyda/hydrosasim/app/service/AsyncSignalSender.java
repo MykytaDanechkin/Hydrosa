@@ -2,7 +2,6 @@ package com.mykyda.hydrosasim.app.service;
 
 import com.mykyda.hydrosasim.app.DTO.SignalRequest;
 import com.mykyda.hydrosasim.app.data.entity.Signal;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -10,11 +9,16 @@ import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class AsyncSignalSender {
 
     private final RestTemplate restTemplate = new RestTemplate();
     private final QueueService queueService;
+    private final String hydrosaUrl;
+
+    public AsyncSignalSender(QueueService queueService, @org.springframework.beans.factory.annotation.Value("${app.hydrosa-url}") String hydrosaUrl) {
+        this.queueService = queueService;
+        this.hydrosaUrl = hydrosaUrl;
+    }
 
     private static final int MAX_RETRIES = 3;
 
@@ -44,7 +48,7 @@ public class AsyncSignalSender {
                         .build();
 
                 restTemplate.postForEntity(
-                        "http://localhost:8080/api/signals",
+                        hydrosaUrl + "/api/signals",
                         request,
                         Void.class
                 );
