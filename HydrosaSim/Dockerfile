@@ -1,10 +1,9 @@
-# Build stage
-FROM gradle:8.12-jdk21 AS build
-COPY --chown=gradle:gradle . /home/gradle/src
-WORKDIR /home/gradle/src
-RUN gradle build --no-daemon -x test
+FROM gradle:8.5-jdk21 AS build
+WORKDIR /app
+COPY . .
+RUN ./gradlew build --no-daemon -x test
 
-# Package stage
-FROM eclipse-temurin:21-jre-jammy
-COPY --from=build /home/gradle/src/build/libs/*.jar app.jar
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+FROM ghcr.io/graalvm/graalvm-community:23.0.2
+WORKDIR /app
+COPY --from=build /app/build/libs/*.jar app.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]
