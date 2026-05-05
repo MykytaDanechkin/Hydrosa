@@ -1,0 +1,63 @@
+server:
+  port: ${SERVER_PORT:8081}
+
+spring:
+
+  application:
+    name: HydrosaSim
+
+  datasource:
+    hikari:
+      auto-commit: true
+    username: ${DATASOURCE_USERNAME:postgres}
+    password: ${DATASOURCE_PASSWORD:postgres}
+    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5433/postgres}
+    driver-class-name: ${DATASOURCE_DRIVER:org.postgresql.Driver}
+
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: ${DDL_AUTO:update}
+
+  #  security:
+  #    cors:
+  #      allowed-origins: ${ALLOWED_ORIGINS:http://localhost:3000}
+  #
+  #
+  #    jwt:
+  #      access-token:
+  #        secret: ${ACCESS_TOKEN_SECRET:secretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecret}
+  #        exp-min: ${ACCESS_TOKEN_EXP_MIN:30}
+  #      cookie:
+  #        same-site: ${COOKIE_SAME_SITE:Lax}
+  #        secure: ${COOKIE_SECURE:false}
+  #        http-only: ${COOKIE_HTTP_ONLY:true}
+  #        path: ${COOKIE_PATH:/}
+  #    oauth2:
+  #      resourceserver:
+  #        jwt:
+  #          issuer-uri: ${JWT_ISSUER:localhost:9000}
+
+  config:
+    import: optional:file:.env[.properties]
+app:
+  gen-util:
+    dot-nw:
+      lat: ${DOT_NORTHWEST_LAT:55.2}
+      lon: ${DOT_NORTHWEST_LON:12.5}
+
+    dot-ne:
+      lat: ${DOT_NORTHEAST_LAT:55.2}
+      lon: ${DOT_NORTHEAST_LON:12.8}
+
+    dot-sw:
+      lat: ${DOT_SOUTHWEST_LAT:55.0}
+      lon: ${DOT_SOUTHWEST_LON:12.5}
+
+    dot-se:
+      lat: ${DOT_SOUTHEAST_LAT:55.0}
+      lon: ${DOT_SOUTHEAST_LON:12.8}
+  schedules:
+    move-freq: ${MOVE_FREQUENCY_MILLISECONDS:1000}
+    signal-freq: ${SIGNAL_FREQUENCY_MILLISECONDS:2000}
+    queue-processing-freq: ${QUEUE_PROCESSING_MILLISECONDS:100}

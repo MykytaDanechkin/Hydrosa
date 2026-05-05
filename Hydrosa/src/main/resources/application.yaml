@@ -1,0 +1,42 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+spring:
+
+  application:
+    name: Hydrosa
+
+  datasource:
+    hikari:
+      auto-commit: true
+    username: ${DATASOURCE_USERNAME:postgres}
+    password: ${DATASOURCE_PASSWORD:postgres}
+    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/postgres}
+    driver-class-name: ${DATASOURCE_DRIVER:org.postgresql.Driver}
+
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: ${DDL_AUTO:update}
+
+  security:
+    cors:
+      allowed-origins: ${ALLOWED_ORIGINS:http://localhost:3000}
+
+
+    jwt:
+      access-token:
+        secret: ${ACCESS_TOKEN_SECRET:secretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecret}
+        exp-min: ${ACCESS_TOKEN_EXP_MIN:30}
+      cookie:
+        same-site: ${COOKIE_SAME_SITE:Lax}
+        secure: ${COOKIE_SECURE:false}
+        http-only: ${COOKIE_HTTP_ONLY:true}
+        path: ${COOKIE_PATH:/}
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${JWT_ISSUER:localhost:9000}
+
+  config:
+    import: optional:file:.env[.properties]
