@@ -41,19 +41,19 @@ public class SenderService {
                 .limit(2)
                 .forEach(station -> {
 
-                    double distance = GeoUtils.distance(
+                    var distance = GeoUtils.distance(
                             obj.getLatitude().doubleValue(), obj.getLongitude().doubleValue(),
                             station.getLatitude().doubleValue(), station.getLongitude().doubleValue());
 
                     if (distance > MAX_DISTANCE) return;
 
-                    double azimuth = GeoUtils.bearing(
+                    var azimuth = GeoUtils.bearing(
                             station.getLatitude().doubleValue(), station.getLongitude().doubleValue(),
                             obj.getLatitude().doubleValue(), obj.getLongitude().doubleValue());
 
 //                    azimuth += random.nextGaussian() * 0.2;
 
-                    double strength = Math.exp(-distance / 5000);
+                    var strength = Math.exp(-distance / 5000);
 
                     if (random.nextDouble() < 0.2) return;
 

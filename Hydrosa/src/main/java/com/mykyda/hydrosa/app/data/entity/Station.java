@@ -27,6 +27,4 @@ public class Station {
     private BigDecimal longitude;
 
     private Double magneticCorrection;
-
-    // todo: зона покриття
 }

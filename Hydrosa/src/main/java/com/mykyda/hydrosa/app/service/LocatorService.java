@@ -72,23 +72,23 @@ public class LocatorService {
 
         for (int i = 0; i < signals.size(); i++) {
             for (int j = i + 1; j < signals.size(); j++) {
-                Signal s1 = signals.get(i);
-                Signal s2 = signals.get(j);
+                var s1 = signals.get(i);
+                var s2 = signals.get(j);
 
                 if (s1.getStation().getId().equals(s2.getStation().getId())) continue;
                 if (s1.getStrength() < MIN_STRENGTH || s2.getStrength() < MIN_STRENGTH) continue;
 
-                double weight = s1.getStrength() * s2.getStrength();
+                var weight = s1.getStrength() * s2.getStrength();
                 if (weight < MIN_STRENGTH_PRODUCT) continue;
 
-                double angleDiff = Math.abs(s1.getAzimuth() - s2.getAzimuth());
+                var angleDiff = Math.abs(s1.getAzimuth() - s2.getAzimuth());
                 if (angleDiff > 180) angleDiff = 360 - angleDiff;
                 if (angleDiff < MIN_ANGLE_DIFF) continue;
 
                 Station st1 = s1.getStation();
                 Station st2 = s2.getStation();
 
-                double[] p = intersectBearings(
+                var p = intersectBearings(
                         st1.getLatitude().doubleValue(), st1.getLongitude().doubleValue(), s1.getAzimuth(),
                         st2.getLatitude().doubleValue(), st2.getLongitude().doubleValue(), s2.getAzimuth()
                 );
@@ -96,12 +96,12 @@ public class LocatorService {
 
                 double lat = p[0], lon = p[1];
 
-                double d1 = GeoUtils.distance(st1.getLatitude().doubleValue(), st1.getLongitude().doubleValue(), lat, lon);
-                double d2 = GeoUtils.distance(st2.getLatitude().doubleValue(), st2.getLongitude().doubleValue(), lat, lon);
+                var d1 = GeoUtils.distance(st1.getLatitude().doubleValue(), st1.getLongitude().doubleValue(), lat, lon);
+                var d2 = GeoUtils.distance(st2.getLatitude().doubleValue(), st2.getLongitude().doubleValue(), lat, lon);
                 if (d1 > MAX_OBJECT_DISTANCE || d2 > MAX_OBJECT_DISTANCE) continue;
 
-                double expectedD1 = -5000.0 * Math.log(s1.getStrength());
-                double expectedD2 = -5000.0 * Math.log(s2.getStrength());
+                var expectedD1 = -5000.0 * Math.log(s1.getStrength());
+                var expectedD2 = -5000.0 * Math.log(s2.getStrength());
                 if (Math.abs(d1 - expectedD1) > expectedD1 * 0.6) continue;
                 if (Math.abs(d2 - expectedD2) > expectedD2 * 0.6) continue;
 
@@ -123,7 +123,7 @@ public class LocatorService {
         for (List<WeightedPoint> cluster : clusters) {
             if (cluster.size() < MIN_CLUSTER_SIZE) continue;
 
-            double[] centroid = weightedCentroid(cluster);
+            var centroid = weightedCentroid(cluster);
             double lat = centroid[0], lon = centroid[1];
 
             LocalDateTime clusterTime = cluster.stream()
@@ -145,22 +145,22 @@ public class LocatorService {
     }
 
     private void updateTrackedObject(TrackedObject obj, double newLat, double newLon, LocalDateTime detectedAt) {
-        double dt = Duration.between(obj.getLastSeen(), detectedAt).toMillis() / 1000.0;
+        var dt = Duration.between(obj.getLastSeen(), detectedAt).toMillis() / 1000.0;
 
         if (dt > 0 && dt < 60) {
-            double fromLat = obj.getLatitude().doubleValue();
-            double fromLon = obj.getLongitude().doubleValue();
-            double dist = GeoUtils.distance(fromLat, fromLon, newLat, newLon);
+            var fromLat = obj.getLatitude().doubleValue();
+            var fromLon = obj.getLongitude().doubleValue();
+            var dist = GeoUtils.distance(fromLat, fromLon, newLat, newLon);
 
             if (dist > 0.3) {
-                double speed = dist / dt;
-                double bearing = GeoUtils.bearing(fromLat, fromLon, newLat, newLon);
+                var speed = dist / dt;
+                var bearing = GeoUtils.bearing(fromLat, fromLon, newLat, newLon);
 
                 if (obj.getEstimatedSpeed() == null) {
                     obj.setEstimatedSpeed(speed);
                     obj.setEstimatedDirection(bearing);
                 } else {
-                    double speedRatio = speed / obj.getEstimatedSpeed();
+                    var speedRatio = speed / obj.getEstimatedSpeed();
                     if (speedRatio > 0.3) {
                         obj.setEstimatedSpeed(EMA_ALPHA * speed + (1 - EMA_ALPHA) * obj.getEstimatedSpeed());
                         obj.setEstimatedDirection(EMA_ALPHA * bearing + (1 - EMA_ALPHA) * obj.getEstimatedDirection());
@@ -203,8 +203,8 @@ public class LocatorService {
 
             for (Signal s : stationSignals) {
                 if (s.getStrength() < MIN_STRENGTH) continue;
-                boolean duplicate = kept.stream().anyMatch(k -> {
-                    double diff = Math.abs(k.getAzimuth() - s.getAzimuth());
+                var duplicate = kept.stream().anyMatch(k -> {
+                    var diff = Math.abs(k.getAzimuth() - s.getAzimuth());
                     if (diff > 180) diff = 360 - diff;
                     return diff < DEDUP_ANGLE;
                 });
@@ -221,29 +221,29 @@ public class LocatorService {
             double lat1, double lon1, double az1,
             double lat2, double lon2, double az2) {
 
-        double phi1 = Math.toRadians(lat1);
-        double phi2 = Math.toRadians(lat2);
+        var phi1 = Math.toRadians(lat1);
+        var phi2 = Math.toRadians(lat2);
 
-        double cos1 = Math.cos(Math.toRadians(az1));
-        double sin1 = Math.sin(Math.toRadians(az1));
-        double cos2 = Math.cos(Math.toRadians(az2));
-        double sin2 = Math.sin(Math.toRadians(az2));
+        var cos1 = Math.cos(Math.toRadians(az1));
+        var sin1 = Math.sin(Math.toRadians(az1));
+        var cos2 = Math.cos(Math.toRadians(az2));
+        var sin2 = Math.sin(Math.toRadians(az2));
 
-        double cosLat = Math.cos((phi1 + phi2) / 2);
+        var cosLat = Math.cos((phi1 + phi2) / 2);
 
-        double dNorth = (lat2 - lat1) * 111_320.0;
-        double dEast = (lon2 - lon1) * 111_320.0 * cosLat;
+        var dNorth = (lat2 - lat1) * 111_320.0;
+        var dEast = (lon2 - lon1) * 111_320.0 * cosLat;
 
-        double det = sin1 * (-cos2) - cos1 * (-sin2);
+        var det = sin1 * (-cos2) - cos1 * (-sin2);
         if (Math.abs(det) < 1e-10) return null;
 
-        double t1 = (dEast * (-cos2) - dNorth * (-sin2)) / det;
-        double t2 = (sin1 * dNorth - cos1 * dEast) / det;
+        var t1 = (dEast * (-cos2) - dNorth * (-sin2)) / det;
+        var t2 = (sin1 * dNorth - cos1 * dEast) / det;
 
         if (t1 < 0 || t2 < 0) return null;
 
-        double latI = lat1 + (t1 * cos1) / 111_320.0;
-        double lonI = lon1 + (t1 * sin1) / (111_320.0 * cosLat);
+        var latI = lat1 + (t1 * cos1) / 111_320.0;
+        var lonI = lon1 + (t1 * sin1) / (111_320.0 * cosLat);
 
         return new double[]{latI, lonI};
     }
@@ -252,12 +252,12 @@ public class LocatorService {
         List<List<WeightedPoint>> clusters = new ArrayList<>();
 
         for (WeightedPoint p : points) {
-            double bestDist = Double.MAX_VALUE;
+            var bestDist = Double.MAX_VALUE;
             List<WeightedPoint> best = null;
 
             for (List<WeightedPoint> c : clusters) {
-                double[] centroid = weightedCentroid(c);
-                double d = GeoUtils.distance(centroid[0], centroid[1], p.lat, p.lon);
+                var centroid = weightedCentroid(c);
+                var d = GeoUtils.distance(centroid[0], centroid[1], p.lat, p.lon);
                 if (d < CLUSTER_RADIUS && d < bestDist) {
                     bestDist = d;
                     best = c;
@@ -276,7 +276,7 @@ public class LocatorService {
     }
 
     private double[] weightedCentroid(List<WeightedPoint> cluster) {
-        double totalWeight = cluster.stream().mapToDouble(p -> p.weight).sum();
+        var totalWeight = cluster.stream().mapToDouble(p -> p.weight).sum();
         if (totalWeight == 0) {
             return new double[]{
                     cluster.stream().mapToDouble(p -> p.lat).average().orElse(0),

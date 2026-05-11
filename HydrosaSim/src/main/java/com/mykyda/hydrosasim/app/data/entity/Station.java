@@ -25,4 +25,6 @@ public class Station {
 
     @Column(precision = 9, scale = 6, nullable = false)
     private BigDecimal longitude;
+
+    private Double magneticCorrection;
 }
