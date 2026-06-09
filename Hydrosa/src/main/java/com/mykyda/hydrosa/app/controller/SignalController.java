@@ -23,10 +23,6 @@ public class SignalController {
         return signalService.getAll();
     }
 
-//    @GetMapping("/{stationId}")
-//    public List<SignalViewDTO> getAllByStationId(@PathVariable Long stationId) {
-//        return signalService.getAllByStationId(stationId);
-//    }
 
     @PostMapping
     public ResponseEntity<String> save(@RequestBody SignalCreateDTO signalDTO) {

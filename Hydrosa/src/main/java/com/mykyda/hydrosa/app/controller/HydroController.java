@@ -4,7 +4,7 @@ import com.mykyda.hydrosa.app.DTO.demo.SignalViewDTO;
 import com.mykyda.hydrosa.app.service.SignalService;
 import com.mykyda.hydrosa.app.service.StationService;
 import lombok.RequiredArgsConstructor;
-import org.jspecify.annotations.NonNull;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

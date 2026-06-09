@@ -42,7 +42,6 @@ class LocatorIntegrationTest {
         trackedObjectRepository.deleteAll();
         stationRepository.deleteAll();
 
-        // 1. Setup two stations
         Station s1 = Station.builder()
                 .latitude(BigDecimal.valueOf(50.0))
                 .longitude(BigDecimal.valueOf(30.0))
@@ -55,25 +54,22 @@ class LocatorIntegrationTest {
                 .build();
         s2 = stationRepository.saveAndFlush(s2);
 
-        // 2. Create signals that should intersect
         signalRepository.saveAndFlush(Signal.builder()
                 .station(s1)
                 .azimuth(45.0)
-                .strength(1.0)
+                .strength(0.5)
                 .processed(false)
                 .build());
 
         signalRepository.saveAndFlush(Signal.builder()
                 .station(s2)
                 .azimuth(315.0)
-                .strength(1.0)
+                .strength(0.5)
                 .processed(false)
                 .build());
 
-        // 3. Run locator
         locatorService.locateSignal();
 
-        // 4. Verify tracked object created
         List<TrackedObject> trackedObjects = trackedObjectRepository.findAll();
         assertFalse(trackedObjects.isEmpty(), "Should have created at least one tracked object");
     }

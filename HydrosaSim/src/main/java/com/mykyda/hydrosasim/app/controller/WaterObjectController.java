@@ -6,7 +6,7 @@ import com.mykyda.hydrosasim.app.data.entity.WaterObject;
 import com.mykyda.hydrosasim.app.service.StationService;
 import com.mykyda.hydrosasim.app.service.WaterObjectService;
 import lombok.RequiredArgsConstructor;
-import org.jspecify.annotations.NonNull;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,7 +42,7 @@ public class WaterObjectController {
                 .toList();
     }
 
-    @GetMapping("/map")
+    @GetMapping(value = "/map", produces = "text/html")
     public String getMap() {
 
         var stations = stationService.getAll();

@@ -40,7 +40,7 @@ class WebSecurityConfig {
 
     @Bean
     @Order(1)
-    SecurityFilterChain apiSecurityFilterChain(HttpSecurity http, JwtFilter jwtFilter){
+    SecurityFilterChain apiSecurityFilterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -74,13 +74,14 @@ class WebSecurityConfig {
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 

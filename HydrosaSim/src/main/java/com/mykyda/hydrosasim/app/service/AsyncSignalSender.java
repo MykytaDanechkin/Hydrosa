@@ -11,13 +11,17 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class AsyncSignalSender {
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    private RestTemplate restTemplate = new RestTemplate();
     private final QueueService queueService;
     private final String hydrosaUrl;
 
     public AsyncSignalSender(QueueService queueService, @org.springframework.beans.factory.annotation.Value("${app.hydrosa-url}") String hydrosaUrl) {
         this.queueService = queueService;
         this.hydrosaUrl = hydrosaUrl;
+    }
+
+    public void setRestTemplate(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
     }
 
     private static final int MAX_RETRIES = 3;

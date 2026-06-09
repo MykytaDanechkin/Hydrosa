@@ -26,4 +26,5 @@ public interface SignalRepository extends JpaRepository<Signal, UUID> {
     void markProcessed(@Param("ids") List<UUID> ids);
 
 
+    void deleteAll();
 }

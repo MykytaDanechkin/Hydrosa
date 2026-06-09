@@ -9,4 +9,8 @@ import java.util.UUID;
 
 public interface TrackedObjectRepository extends JpaRepository<TrackedObject, UUID> {
     List<TrackedObject> findByStatusNot(TrackStatus status);
+
+    void deleteAll();
+
+    List<TrackedObject> findAll();
 }
